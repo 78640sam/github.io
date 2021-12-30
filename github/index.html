@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css">
+    <title>Github</title>
+  </head>
+
+ 
+  <body>
+  
+    <div id="navbar_container"></div>
+
+    <div id="main">
+<button id="get-repo-btn">Get rep</button>
+    </div>
+  </body>
+</html>
+
+
+<script type="module">
+
+  import getData from "./script/getData.js";
+  import navbar from "./components/navbar.js";
+
+  let navbar_container=document.getElementById("navbar_container");
+
+  navbar_container.innerHTML= navbar();
+
+
+  let search_box=document.getElementById("search-input");
+  search_box.addEventListener("keypress",makeAPICall);
+
+ async function makeAPICall(e){
+   
+   if(e.key==="Enter"){
+
+  let user=search_box.value;
+
+  var response = await getData(user);
+
+  console.log(response);
+
+  let img=document.getElementById("profile-img");
+
+img.src=response.avatar_url;
+
+let btn =document.getElementById("get-repo-btn");
+
+btn.onclick=function(){
+getUserRepos(response);
+}
+
+// console.log(url);
+
+
+   }
+}
+
+// let btn =document.getElementById("get-repo-btn");
+
+//  btn.addEventListener("click",getUserRepos);
+
+ async function getUserRepos(response){
+// let response;
+   let res=await fetch(response.repos_url)
+
+   let data= await res.json();
+   console.log(data);
+   
+ }
+
+</script>

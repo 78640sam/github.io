@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+</head>
+<body>
+    
+<div id="login-form">
+    <h1>Login</h1>
+    <form action="">
+
+        <input type="text" id="login-username" placeholder="username">
+    <input type="text" id="login-password" placeholder="password">
+    </form>
+    <button onclick="Login()"> Login</button>
+
+</div>
+</body>
+</html>
+
+<script>
+    
+async function Login(){
+
+let login_data={
+
+    username: document.getElementById("login-username").value,
+    password: document.getElementById("login-password").value,
+};
+
+
+login_data=JSON.stringify(login_data);
+
+
+let login_api = `https://masai-api-mocker.herokuapp.com/auth/login`;
+
+
+
+
+let response = await fetch (login_api, {
+
+    method:"POST",
+    body: login_data,
+
+    headers: {
+        "content-Type":"application/json",
+    },
+
+});
+
+
+let data= await response.json();
+
+console.log(data);
+if(data.error==true){
+    alert("Username Password is incorrect")
+}else{
+    alert("Welcome to Github");
+    window.location="index.html";
+}
+
+let username=document.getElementById("login-username").value;
+
+getProfile(username, data.token);
+
+}
+
+
+async function getProfile(username,token) {
+
+    let api=`https://masai-api-mocker.herokuapp.com/user/${username}`;
+
+   let response= await fetch(api, {
+        headers: {
+            "Content-Type": "application/json",
+            
+            Authorization:`Bearer ${token}`,
+        },
+    });
+
+    let data = await response.json();
+    console.log(data);
+}
+
+</script>
